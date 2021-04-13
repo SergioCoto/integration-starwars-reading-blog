@@ -8,7 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			getPeople: () => {
-				fetch("https://swapi.dev/api/people/")
+				fetch("https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/character/")
 					.then(resp => {
 						console.log("GET people request: ", resp.ok);
 						resp.status >= 200 && resp.status < 300
@@ -17,14 +17,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						setStore({ people: data.results, loading: false });
-						console.log("People array: ", data.results);
+						setStore({ people: data, loading: false });
+						console.log("People array: ", data);
 					})
 					.catch(error => console.error("GET people error: ", error));
 			},
 
 			getPlanets: () => {
-				fetch("https://swapi.dev/api/planets/")
+				fetch("https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/planet/")
 					.then(resp => {
 						console.log("GET planets request: ", resp.ok);
 						resp.status >= 200 && resp.status < 300
@@ -33,8 +33,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						setStore({ planets: data.results, loading: false });
-						console.log("Planets array: ", data.results);
+						setStore({ planets: data, loading: false });
+						console.log("Planets array: ", data);
 					})
 					.catch(error => console.error("GET planets error: ", error));
 			},
