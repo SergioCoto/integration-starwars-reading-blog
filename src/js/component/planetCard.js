@@ -38,7 +38,7 @@ PlanetCard.propTypes = {
 	index: PropTypes.number,
 	planet: PropTypes.shape({
 		name: PropTypes.string,
-		population: PropTypes.string,
+		population: PropTypes.number,
 		terrain: PropTypes.string
 	})
 };
