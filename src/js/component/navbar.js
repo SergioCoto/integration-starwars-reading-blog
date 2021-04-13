@@ -8,10 +8,12 @@ export const Navbar = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light bg-light mb-3 px-5">
+		<nav className="navbar navbar-expand-lg navbar-light bg-light mb-3 px-5 d-flex justify-content-between">
 			<Link to="/">
 				<span className="navbar-brand mb-0 h1 pl-5">StarWars</span>
 			</Link>
+
+			{!store.token ? null : <Favorites />}
 
 			{!store.token ? (
 				<Link to="/login">
@@ -21,9 +23,7 @@ export const Navbar = () => {
 				<button onClick={() => actions.logout()} className="btn btn-primary">
 					Log out
 				</button>
-			)
-			//<Favorites />
-			}
+			)}
 		</nav>
 	);
 };

@@ -34,6 +34,7 @@ const injectContext = PassedComponent => {
 
 			state.actions.getPeople();
 			state.actions.getPlanets();
+			// state.actions.getUsers();
 			state.actions.syncTokenFromSessionStore(); // to setStore with token on every refresh
 		}, []);
 

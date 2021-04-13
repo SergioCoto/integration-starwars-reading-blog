@@ -1,3 +1,7 @@
+import jwt_decode from "jwt-decode"; //library that helps decoding JWTs token which are Base64Url encoded
+
+// $ npm install jwt-decode
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -6,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			favorites: [],
 			loading: true,
 			token: null
+			// user: []
 		},
 		actions: {
 			login: (email, password) => {
@@ -49,7 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			logout: () => {
 				sessionStorage.removeItem("token");
-				setStore({ token: null });
+				setStore({ token: null, favorites: [] });
 			},
 
 			getPeople: () => {
@@ -84,6 +89,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error("GET planets error: ", error));
 			},
 
+			getUsers: () => {
+				fetch("https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/user")
+					.then(resp => {
+						console.log("GET user request: ", resp.ok);
+						resp.status >= 200 && resp.status < 300
+							? console.log("GET user successful, status: ", resp.status)
+							: console.error("GET user failed, status: ", resp.status);
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ user: data, loading: false });
+						console.log("User array: ", data);
+					})
+					.catch(error => console.error("GET user error: ", error));
+			},
+
 			getFavorites: () => {
 				const store = getStore();
 
@@ -116,7 +137,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				store.favorites.includes(item.name)
 					? setStore({ favorites: store.favorites })
 					: setStore({ favorites: store.favorites.concat(item.name) });
-				console.log("Added favorites: ", store.favorites);
+				console.log("Favorites added in front-end: ", store.favorites);
+
+				const token = sessionStorage.getItem("token");
+				console.log(token);
+				const tokenPayload = jwt_decode(token).sub; // jwt_decode returns the jwt object payload. Using "jwt debugger" we can see that .sub retuns the id in this case
+				console.log(tokenPayload);
 
 				const URL = "https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/favorite";
 				const CONFIG = {
@@ -127,7 +153,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					body: JSON.stringify({
 						item_id: item.id,
-						item_type: item.item_type
+						item_type: item.item_type,
+						user_id: tokenPayload
 					})
 				};
 
@@ -137,7 +164,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						else alert("There was some error while adding the favorite");
 					})
 					.then(data => {
-						console.log("Favorite added: ", data);
+						console.log("Favorite added to DB: ", data);
 					})
 					.catch(error => {
 						console.error("CREATE Token error: ", error);
