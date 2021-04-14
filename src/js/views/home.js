@@ -12,9 +12,9 @@ export const Home = () => {
 
 	return (
 		<div className="container">
+			<FavoritesList />
 			<CharacterList />
 			<PlanetList />
-			<FavoritesList />
 		</div>
 	);
 };

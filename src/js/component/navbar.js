@@ -10,7 +10,7 @@ export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light mb-3 px-5 d-flex justify-content-between">
 			<Link to="/">
-				<span className="navbar-brand mb-0 h1 pl-5">StarWars</span>
+				<h1 className="navbar-brand mb-0 h1 pl-5">StarWars</h1>
 			</Link>
 
 			{!store.token ? null : <Favorites />}

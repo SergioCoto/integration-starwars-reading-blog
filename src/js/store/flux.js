@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			favorites_raw: []
 		},
 		actions: {
-			login: (email, password) => {
+			// using Async Await because it allows me to use .then() to getFavorites in login.js file afer user login
+			login: async (email, password) => {
 				const URL = "https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/token"; // API to create token
 				const CONFIG = {
 					method: "POST",
@@ -26,19 +27,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				};
 
-				fetch(URL, CONFIG)
-					.then(resp => {
-						if (resp.status === 200) return resp.json();
-						else alert("There was some error while creating the token");
-					})
-					.then(data => {
-						console.log("Token created from back-end", data);
-						sessionStorage.setItem("token", data.access_token);
-						setStore({ token: data.access_token });
-					})
-					.catch(error => {
-						console.error("CREATE Token error: ", error);
-					});
+				try {
+					const resp = await fetch(URL, CONFIG);
+					if (resp.status !== 200) {
+						alert("There was an error during authentication");
+						return false;
+					}
+
+					const data = await resp.json();
+					console.log("Token created from back-end", data);
+					sessionStorage.setItem("token", data.access_token);
+					setStore({ token: data.access_token });
+					return true;
+				} catch (error) {
+					console.error("CREATE Token error: ", error);
+				}
 
 				// With sessionStorage , the data is persisted only until the window or tab is closed.
 				// With localStorage , the data is persisted until the user manually clears the browser cache or until your web app clears the data.
@@ -50,8 +53,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
+			// to store favorites on every refresh
+			storeSessionFavorites: () => {
+				const store = getStore();
+				const favorites = sessionStorage.getItem("favorites");
+				if (store.token && store.token != "" && store.token != undefined) setStore({ favorites: favorites });
+			},
+
 			logout: () => {
 				sessionStorage.removeItem("token");
+				sessionStorage.removeItem("favorites");
 				setStore({ token: null, favorites: [] });
 			},
 
@@ -125,6 +136,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return resp.json();
 						})
 						.then(data => {
+							sessionStorage.setItem("favorites", data);
 							setStore({ favorites: data, loading: false });
 							console.log("Favorites array from getFavorites(): ", data);
 						})
@@ -132,6 +144,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// to get favorites id
 			getFavoritesRaw: () => {
 				const store = getStore();
 
@@ -163,10 +176,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			addFavorite: item => {
 				const store = getStore();
-				// store.favorites.includes(item.name)
-				//     ? setStore({ favorites: store.favorites })
-				//     : setStore({ favorites: store.favorites.concat(item) });
-				// console.log("Favorites added in front-end: ", store.favorites);
 
 				const token = sessionStorage.getItem("token");
 				console.log(token);
@@ -174,17 +183,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log("ID obtained from token with jwt_decode: ", tokenPayload);
 				console.log("Item passed as parameter to addFavorite(): ", item);
 
-				const filter = {
-					id: item.id,
-					item_type: item.item_type
-				};
-
-				const filteredResults = store.favorites.filter(function(elem) {
-					for (let key in filter) {
-						if (elem[key] === undefined || elem[key] != filter[key]) return false;
-					}
-					return true;
+				let filteredResults = store.favorites.filter(function(currentElement) {
+					// the current value is an object, so you can check on its properties
+					return currentElement.id == item.id && currentElement.item_type == item.item_type;
 				});
+
 				console.log("Filtered result: ", filteredResults);
 
 				if (filteredResults.length == 0) {
@@ -218,11 +221,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} else alert("Item already added to favorites");
 			},
 
-			removeFavorite: favoriteId => {
+			removeFavorite: (favoriteId, item) => {
 				const store = getStore();
 				// store.favorites.splice(indexOf(index), 1);
 				// setStore({ favorites: store.favorites });
 				// console.log("Removed favorites:", store.favorites);
+
+				let itemNameArray = store.favorites.map(obj => obj.name); // turn favorites object into name array to use indexOf() method
+				console.log("Favorites names (called with removeFavorite()): ", itemNameArray);
+
+				let index = itemNameArray.indexOf(item.name);
+				console.log("The index to remove is: ", index);
+
+				store.favorites.splice(index, 1);
+				setStore({ favorites: store.favorites });
+				sessionStorage.setItem("favorites", store.favorites);
+				console.log("Favorites remained after removeFavorite(): ", store.favorites);
 
 				console.log("This the fav ID to remove: ", favoriteId);
 
@@ -243,7 +257,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							: console.error("DELETE favorites failed, status: ", resp.status);
 						return resp.json();
 					})
-					.then(getActions().getFavorites())
 					.catch(error => console.error("DELETE favorites error: ", error));
 
 				console.log("This is the URL: ", URL);

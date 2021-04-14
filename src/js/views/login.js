@@ -17,8 +17,10 @@ export const Login = () => {
 	console.log("This is your token: ", store.token);
 
 	const handleClick = () => {
-		actions.login(email, password);
-		actions.getFavorites();
+		actions.login(email, password).then(() => {
+			actions.getFavorites();
+			actions.getFavoritesRaw();
+		});
 	};
 
 	if (store.token && store.token != "" && store.token != undefined) {

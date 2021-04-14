@@ -11,14 +11,6 @@ export const FavoritesList = () => {
 	return (
 		<div className="container-fluid">
 			<h3 className="text-danger">Favorites List</h3>
-			<button
-				className="btn btn-success"
-				onClick={() => {
-					actions.getFavorites();
-					actions.getFavoritesRaw();
-				}}>
-				Click to show your saved favorites
-			</button>
 			{store.favorites.length === 0 ? (
 				<p className="text-muted">No favorites selected</p>
 			) : (
@@ -39,3 +31,13 @@ export const FavoritesList = () => {
 		</div>
 	);
 };
+
+// Button used to test getFavorites() fetch function
+// <button
+// 	className="btn btn-success"
+// 	onClick={() => {
+// 		actions.getFavorites();
+// 		actions.getFavoritesRaw();
+// 	}}>
+// 	Click to show your saved favorites
+// </button>

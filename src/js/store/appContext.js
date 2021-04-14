@@ -35,6 +35,7 @@ const injectContext = PassedComponent => {
 			state.actions.getPeople();
 			state.actions.getPlanets();
 			state.actions.storeSessionToken(); // to setStore with token on every refresh
+			state.actions.storeSessionFavorites();
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,

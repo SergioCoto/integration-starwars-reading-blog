@@ -25,20 +25,10 @@ export const Favorites = () => {
 					<a className="dropdown-item text-center">(empty)</a>
 				) : (
 					store.favorites.map((item, index) => {
-						let peopleId = store.people.map(obj => obj.name).indexOf(item.name);
+						let peopleId = store.people.map(obj => obj.name).indexOf(item.name); // can also use hasOwnProperty method
 
-						let planetId = store.planets.map(obj => obj.name).indexOf(item.name);
-
-						const filter = {
-							item_id: item.id,
-							item_type: item.item_type
-						};
-
-						const filteredResults = store.favorites_raw.filter(function(elem) {
-							for (let key in filter) {
-								if (elem[key] === undefined || elem[key] != filter[key]) return false;
-							}
-							return true;
+						let filteredResults = store.favorites_raw.filter(function(currentElement) {
+							return currentElement.item_id == item.id && currentElement.item_type == item.item_type;
 						});
 
 						// filter returns an array, so we have to specify the position to get the id value from filteredResults
@@ -48,7 +38,7 @@ export const Favorites = () => {
 								<Link to={peopleId !== -1 ? "/people/" + item.id : "/planet/" + item.id} key={index}>
 									{item.name}{" "}
 								</Link>
-								<span onClick={() => actions.removeFavorite(filteredResults[0].id)}>
+								<span onClick={() => actions.removeFavorite(filteredResults[0].id, item)}>
 									<i className="fas fa-trash-alt float-right" />
 								</span>
 							</a>
