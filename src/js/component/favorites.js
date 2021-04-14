@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
-
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
 
 import "../../styles/demo.scss";
 
@@ -26,16 +25,30 @@ export const Favorites = () => {
 					<a className="dropdown-item text-center">(empty)</a>
 				) : (
 					store.favorites.map((item, index) => {
-						let peopleId = store.people.map(obj => obj.name).indexOf(item);
+						let peopleId = store.people.map(obj => obj.name).indexOf(item.name);
 
-						let planetId = store.planets.map(obj => obj.name).indexOf(item);
+						let planetId = store.planets.map(obj => obj.name).indexOf(item.name);
+
+						const filter = {
+							item_id: item.id,
+							item_type: item.item_type
+						};
+
+						const filteredResults = store.favorites_raw.filter(function(elem) {
+							for (let key in filter) {
+								if (elem[key] === undefined || elem[key] != filter[key]) return false;
+							}
+							return true;
+						});
+
+						// filter returns an array, so we have to specify the position to get the id value from filteredResults
 
 						return (
 							<a className="dropdown-item" key={index}>
-								<Link to={peopleId !== -1 ? "/people/" + peopleId : "/planet/" + planetId} key={index}>
-									{item}{" "}
+								<Link to={peopleId !== -1 ? "/people/" + item.id : "/planet/" + item.id} key={index}>
+									{item.name}{" "}
 								</Link>
-								<span onClick={() => actions.removeFavorite(index)}>
+								<span onClick={() => actions.removeFavorite(filteredResults[0].id)}>
 									<i className="fas fa-trash-alt float-right" />
 								</span>
 							</a>

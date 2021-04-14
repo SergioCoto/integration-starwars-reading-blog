@@ -12,7 +12,8 @@ import img400x200 from "../../img/img400x200.png";
 export const PlanetCard = props => {
 	const { store, actions } = useContext(Context);
 
-	let isFavorite = store.favorites.includes(props.planet.name);
+	let favoriteNameArray = store.favorites.map(obj => obj.name); // turn favorites object into name array because includes method only works with arrays
+	let isFavorite = favoriteNameArray.includes(props.planet.name);
 
 	return (
 		<div className="card">
@@ -22,7 +23,7 @@ export const PlanetCard = props => {
 				<p className="card-text">Gender: {props.planet.population}</p>
 				<p className="card-text">Hair Color: {props.planet.terrain}</p>
 				<div className="d-flex justify-content-between">
-					<Link to={"/planet/" + props.index}>
+					<Link to={"/planet/" + props.planet.id}>
 						<button className="btn btn-outline-primary">Learn more!</button>
 					</Link>
 					<button className="btn btn-outline-warning" onClick={() => actions.addFavorite(props.planet)}>
@@ -39,6 +40,7 @@ PlanetCard.propTypes = {
 	planet: PropTypes.shape({
 		name: PropTypes.string,
 		population: PropTypes.number,
-		terrain: PropTypes.string
+		terrain: PropTypes.string,
+		id: PropTypes.number
 	})
 };

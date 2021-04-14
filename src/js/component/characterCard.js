@@ -12,7 +12,8 @@ import img400x200 from "../../img/img400x200.png";
 export const CharacterCard = props => {
 	const { store, actions } = useContext(Context);
 
-	let isFavorite = store.favorites.includes(props.character.name);
+	let favoriteNameArray = store.favorites.map(obj => obj.name); // turn favorites object into name array because includes method only works with arrays
+	let isFavorite = favoriteNameArray.includes(props.character.name);
 
 	return (
 		<div className="card">
@@ -23,7 +24,7 @@ export const CharacterCard = props => {
 				<p className="card-text">Hair Color: {props.character.hair_color}</p>
 				<p className="card-text">Eye Color: {props.character.eye_color}</p>
 				<div className="d-flex justify-content-between">
-					<Link to={"/people/" + props.index}>
+					<Link to={"/people/" + props.character.id}>
 						<button className="btn btn-outline-primary">Learn more!</button>
 					</Link>
 					<button
@@ -45,6 +46,7 @@ CharacterCard.propTypes = {
 		name: PropTypes.string,
 		gender: PropTypes.string,
 		hair_color: PropTypes.string,
-		eye_color: PropTypes.string
+		eye_color: PropTypes.string,
+		id: PropTypes.number
 	})
 };

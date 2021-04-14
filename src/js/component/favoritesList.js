@@ -11,6 +11,14 @@ export const FavoritesList = () => {
 	return (
 		<div className="container-fluid">
 			<h3 className="text-danger">Favorites List</h3>
+			<button
+				className="btn btn-success"
+				onClick={() => {
+					actions.getFavorites();
+					actions.getFavoritesRaw();
+				}}>
+				Click to show your saved favorites
+			</button>
 			{store.favorites.length === 0 ? (
 				<p className="text-muted">No favorites selected</p>
 			) : (
@@ -21,8 +29,8 @@ export const FavoritesList = () => {
 						let planetId = store.planets.map(obj => obj.name).indexOf(item);
 
 						return (
-							<Link to={peopleId !== -1 ? "/people/" + peopleId : "/planet/" + planetId} key={index}>
-								<button className="btn btn-outline-success m-2">{item}</button>
+							<Link to={peopleId !== -1 ? "/people/" + item.id : "/planet/" + item.id} key={index}>
+								<button className="btn btn-outline-success m-2">{item.name}</button>
 							</Link>
 						);
 					})}

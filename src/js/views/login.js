@@ -18,9 +18,12 @@ export const Login = () => {
 
 	const handleClick = () => {
 		actions.login(email, password);
+		actions.getFavorites();
 	};
 
-	if (store.token && store.token != "" && store.token != undefined) history.push("/"); // redirect to "/" = home once logged in
+	if (store.token && store.token != "" && store.token != undefined) {
+		history.push("/"); // redirect to "/" = home once logged in
+	}
 
 	return (
 		<div className="container">
