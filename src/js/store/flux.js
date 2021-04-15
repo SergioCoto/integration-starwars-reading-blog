@@ -53,13 +53,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
-			// to store favorites on every refresh
-			storeSessionFavorites: () => {
-				const store = getStore();
-				const favorites = sessionStorage.getItem("favorites");
-				if (store.token && store.token != "" && store.token != undefined) setStore({ favorites: favorites });
-			},
-
 			logout: () => {
 				sessionStorage.removeItem("token");
 				sessionStorage.removeItem("favorites");
@@ -136,7 +129,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return resp.json();
 						})
 						.then(data => {
-							sessionStorage.setItem("favorites", data);
+							//sessionStorage.setItem("favorites", data);
 							setStore({ favorites: data, loading: false });
 							console.log("Favorites array from getFavorites(): ", data);
 						})
@@ -223,22 +216,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			removeFavorite: (favoriteId, item) => {
 				const store = getStore();
-				// store.favorites.splice(indexOf(index), 1);
-				// setStore({ favorites: store.favorites });
-				// console.log("Removed favorites:", store.favorites);
-
-				let itemNameArray = store.favorites.map(obj => obj.name); // turn favorites object into name array to use indexOf() method
-				console.log("Favorites names (called with removeFavorite()): ", itemNameArray);
-
-				let index = itemNameArray.indexOf(item.name);
-				console.log("The index to remove is: ", index);
-
-				store.favorites.splice(index, 1);
-				setStore({ favorites: store.favorites });
-				sessionStorage.setItem("favorites", store.favorites);
-				console.log("Favorites remained after removeFavorite(): ", store.favorites);
-
-				console.log("This the fav ID to remove: ", favoriteId);
 
 				const URL = `https://3000-purple-monkey-z1qygdjf.ws-us03.gitpod.io/favorite/${favoriteId}`;
 				const CONFIG = {
@@ -257,9 +234,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							: console.error("DELETE favorites failed, status: ", resp.status);
 						return resp.json();
 					})
+					.then(() => getActions().getFavorites()) // remember to use callback function, otherwise it wont work
 					.catch(error => console.error("DELETE favorites error: ", error));
 
-				console.log("This is the URL: ", URL);
+				console.log("This is the URL to remove: ", URL);
+
+				console.log("This the fav ID to remove: ", favoriteId);
 			},
 
 			handleOnSelectCharacter: item => {

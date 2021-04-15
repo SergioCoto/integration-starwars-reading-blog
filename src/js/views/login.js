@@ -28,20 +28,37 @@ export const Login = () => {
 	}
 
 	return (
-		<div className="container">
+		<div className="container-fluid text-center">
 			<h1>Login</h1>
 			{store.token && store.token != "" && store.token != undefined ? (
 				"You are logged in with this token" + store.token
 			) : (
-				<div>
-					<input type="text" placeholder="email" value={email} onChange={e => setEmail(e.target.value)} />
-					<input
-						type="password"
-						placeholder="password"
-						value={password}
-						onChange={e => setPassword(e.target.value)}
-					/>
-					<button onClick={handleClick}>Login</button>
+				<div className="d-flex justify-content-center">
+					<form>
+						<div className="row mb-3">
+							<input
+								type="text"
+								placeholder="email"
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+							/>
+						</div>
+
+						<div className="row mb-3">
+							<input
+								type="password"
+								placeholder="password"
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+							/>
+						</div>
+
+						<div className="row mb-3">
+							<button type="button" className="btn btn-info" onClick={handleClick}>
+								Login
+							</button>
+						</div>
+					</form>
 				</div>
 			)}
 		</div>
