@@ -10,7 +10,7 @@ export const Favorites = () => {
 	return (
 		<div className="dropdown pr-5 ml-auto">
 			<a
-				className="btn btn-primary dropdown-toggle"
+				className="btn btn-outline-warning dropdown-toggle"
 				href="#"
 				role="button"
 				id="dropdownMenuLink"

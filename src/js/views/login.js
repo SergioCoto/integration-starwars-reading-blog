@@ -54,7 +54,7 @@ export const Login = () => {
 						</div>
 
 						<div className="row mb-3">
-							<button type="button" className="btn btn-info" onClick={handleClick}>
+							<button type="button" className="btn btn-outline-warning" onClick={handleClick}>
 								Login
 							</button>
 						</div>

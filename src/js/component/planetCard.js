@@ -24,10 +24,10 @@ export const PlanetCard = props => {
 				<p className="card-text">Hair Color: {props.planet.terrain}</p>
 				<div className="d-flex justify-content-between">
 					<Link to={"/planet/" + props.planet.id}>
-						<button className="btn btn-outline-primary">Learn more!</button>
+						<button className="btn btn-outline-warning">Learn more!</button>
 					</Link>
 					<button
-						className="btn btn-outline-warning"
+						className="btn btn-outline-danger"
 						onClick={() => {
 							store.token ? actions.addFavorite(props.planet) : alert("Please login to add favorites");
 						}}>

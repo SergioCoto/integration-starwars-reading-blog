@@ -25,10 +25,10 @@ export const CharacterCard = props => {
 				<p className="card-text">Eye Color: {props.character.eye_color}</p>
 				<div className="d-flex justify-content-between">
 					<Link to={`/character/${props.character.id}`}>
-						<button className="btn btn-outline-primary">Learn more!</button>
+						<button className="btn btn-outline-warning">Learn more!</button>
 					</Link>
 					<button
-						className="btn btn-outline-warning"
+						className="btn btn-outline-danger"
 						onClick={() => {
 							store.token ? actions.addFavorite(props.character) : alert("Please login to add favorites");
 						}}>

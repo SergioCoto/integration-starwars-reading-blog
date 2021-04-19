@@ -9,13 +9,13 @@ export const FavoritesList = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid bg-light">
 			<h3 className="text-danger">Favorites List</h3>
 
 			{store.token && store.favorites.length === 0 ? (
 				<p className="text-muted">No favorites selected</p>
 			) : store.token ? (
-				<div className="bg-light">
+				<div className="">
 					{store.favorites.map((item, index) => {
 						let peopleId = store.people.map(obj => obj.name).indexOf(item.name); // can also use method .hasOwnProperty()
 
@@ -23,7 +23,7 @@ export const FavoritesList = () => {
 
 						return (
 							<Link to={peopleId !== -1 ? "/character/" + item.id : "/planet/" + item.id} key={index}>
-								<button className="btn btn-outline-success m-2">{item.name}</button>
+								<button className="btn btn-warning m-2">{item.name}</button>
 							</Link>
 						);
 					})}

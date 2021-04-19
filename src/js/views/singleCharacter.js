@@ -74,7 +74,7 @@ export const SingleCharacter = () => {
 			</div>
 			<div className="d-flex justify-content-start">
 				<Link to="/">
-					<div className="btn btn-outline-primary">Back to home</div>
+					<div className="btn btn-outline-warning">Back to home</div>
 				</Link>
 			</div>
 		</div>
