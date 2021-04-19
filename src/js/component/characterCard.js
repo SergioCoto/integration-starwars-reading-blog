@@ -30,7 +30,7 @@ export const CharacterCard = props => {
 					<button
 						className="btn btn-outline-warning"
 						onClick={() => {
-							actions.addFavorite(props.character);
+							store.token ? actions.addFavorite(props.character) : alert("Please login to add favorites");
 						}}>
 						<i className={isFavorite ? "fas fa-heart" : "far fa-heart"} />
 					</button>

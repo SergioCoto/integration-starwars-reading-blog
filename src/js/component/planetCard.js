@@ -26,7 +26,11 @@ export const PlanetCard = props => {
 					<Link to={"/planet/" + props.planet.id}>
 						<button className="btn btn-outline-primary">Learn more!</button>
 					</Link>
-					<button className="btn btn-outline-warning" onClick={() => actions.addFavorite(props.planet)}>
+					<button
+						className="btn btn-outline-warning"
+						onClick={() => {
+							store.token ? actions.addFavorite(props.planet) : alert("Please login to add favorites");
+						}}>
 						<i className={isFavorite ? "fas fa-heart" : "far fa-heart"} />
 					</button>
 				</div>

@@ -11,9 +11,10 @@ export const FavoritesList = () => {
 	return (
 		<div className="container-fluid">
 			<h3 className="text-danger">Favorites List</h3>
-			{store.favorites.length === 0 ? (
+
+			{store.token && store.favorites.length === 0 ? (
 				<p className="text-muted">No favorites selected</p>
-			) : (
+			) : store.token ? (
 				<div className="bg-light">
 					{store.favorites.map((item, index) => {
 						let peopleId = store.people.map(obj => obj.name).indexOf(item.name); // can also use method .hasOwnProperty()
@@ -27,6 +28,8 @@ export const FavoritesList = () => {
 						);
 					})}
 				</div>
+			) : (
+				<p>Login to see your favorites list</p>
 			)}
 		</div>
 	);
