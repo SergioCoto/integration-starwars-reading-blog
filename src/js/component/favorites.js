@@ -35,7 +35,7 @@ export const Favorites = () => {
 
 						return (
 							<a className="dropdown-item" key={index}>
-								<Link to={peopleId !== -1 ? "/people/" + item.id : "/planet/" + item.id} key={index}>
+								<Link to={peopleId !== -1 ? "/character/" + item.id : "/planet/" + item.id} key={index}>
 									{item.name}{" "}
 								</Link>
 								<span onClick={() => actions.removeFavorite(filteredResults[0].id, item)}>

@@ -24,7 +24,7 @@ export const CharacterCard = props => {
 				<p className="card-text">Hair Color: {props.character.hair_color}</p>
 				<p className="card-text">Eye Color: {props.character.eye_color}</p>
 				<div className="d-flex justify-content-between">
-					<Link to={"/people/" + props.character.id}>
+					<Link to={`/character/${props.character.id}`}>
 						<button className="btn btn-outline-primary">Learn more!</button>
 					</Link>
 					<button

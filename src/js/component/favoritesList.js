@@ -16,12 +16,12 @@ export const FavoritesList = () => {
 			) : (
 				<div className="bg-light">
 					{store.favorites.map((item, index) => {
-						let peopleId = store.people.map(obj => obj.name).indexOf(item);
+						let peopleId = store.people.map(obj => obj.name).indexOf(item.name); // can also use method .hasOwnProperty()
 
-						let planetId = store.planets.map(obj => obj.name).indexOf(item);
+						let planetId = store.planets.map(obj => obj.name).indexOf(item.name); // not necessary, used when working with public swapi.tech api
 
 						return (
-							<Link to={peopleId !== -1 ? "/people/" + item.id : "/planet/" + item.id} key={index}>
+							<Link to={peopleId !== -1 ? "/character/" + item.id : "/planet/" + item.id} key={index}>
 								<button className="btn btn-outline-success m-2">{item.name}</button>
 							</Link>
 						);

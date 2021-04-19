@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
@@ -7,9 +7,26 @@ import img800x600 from "../../img/img800x600.png";
 
 export const SinglePlanet = props => {
 	const { store, actions } = useContext(Context);
-	const params = useParams();
+	const params = useParams(); // we can set params in different ways. Here is one way and in singleCharacter.js another way
+	//let { id } = useParams();
 
-	let planet = store.planets[params.theid];
+	let [planet, setPlanet] = useState({});
+
+	const URL = `${store.url}/planet/${params.id}`;
+
+	useEffect(() => {
+		fetch(URL)
+			.then(res => {
+				return res.json();
+			})
+			.then(data => {
+				console.log(`Single planet: ${data}`);
+				setPlanet(data);
+			})
+			.catch(err => {
+				console.error(`Error: ${err}`);
+			});
+	}, []);
 
 	return (
 		<div className="container text-center w-75">
