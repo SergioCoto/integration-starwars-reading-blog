@@ -20,6 +20,7 @@ export const Login = () => {
 		actions.login(email, password).then(() => {
 			actions.getFavorites();
 			actions.getFavoritesRaw();
+			actions.getCurrentUser();
 		});
 	};
 

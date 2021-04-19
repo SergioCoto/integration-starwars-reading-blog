@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			loading: true,
 			token: null,
 			favorites_raw: [],
+			current_username: "",
 			url: "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io" // change this! See below, do NOT add slash '/' at the end
 
 			// url: refer to API created in repository: https://github.com/litzcode/python-flask-starwars-reading-blog for URL
@@ -59,9 +60,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
+			storeSessionUser: () => {
+				const store = getStore();
+				const current_username = sessionStorage.getItem("current_username");
+				if (store.token && store.token != "" && store.token != undefined)
+					setStore({ current_username: current_username });
+			},
+
 			logout: () => {
 				sessionStorage.removeItem("token");
-				setStore({ token: null, favorites: [], favorites_raw: [] });
+				sessionStorage.removeItem("current_username");
+				setStore({ token: null, favorites: [], favorites_raw: [], current_username: "" });
 			},
 
 			getPeople: () => {
@@ -100,22 +109,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error("GET planets error: ", error));
 			},
 
-			getUsers: () => {
+			getCurrentUser: () => {
+				// add this function to login.js
 				const store = getStore();
 
-				fetch(`${store.url}/user`)
-					.then(resp => {
-						console.log("GET user request: ", resp.ok);
-						resp.status >= 200 && resp.status < 300
-							? console.log("GET user successful, status: ", resp.status)
-							: console.error("GET user failed, status: ", resp.status);
-						return resp.json();
-					})
-					.then(data => {
-						setStore({ user: data, loading: false });
-						console.log("User array: ", data);
-					})
-					.catch(error => console.error("GET user error: ", error));
+				if (store.token && store.token != "" && store.token != undefined) {
+					const current_user_id = jwt_decode(store.token).sub; // jwt_decode returns the jwt object payload. Using "jwt debugger" we can see that .sub retuns the id in this case
+					console.log("Current user IDs from token with jwt_decode: ", current_user_id);
+
+					fetch(`${store.url}/user/${current_user_id}`)
+						.then(resp => {
+							console.log("GET current user request: ", resp.ok);
+							resp.status >= 200 && resp.status < 300
+								? console.log("GET current user successful, status: ", resp.status)
+								: console.error("GET current user failed, status: ", resp.status);
+							return resp.json();
+						})
+						.then(data => {
+							sessionStorage.setItem("current_username", data.username);
+							setStore({ current_username: data.username, loading: false });
+							console.log("Current user: ", data);
+						})
+						.catch(error => console.error("GET current user error: ", error));
+				}
 			},
 
 			getFavorites: () => {
