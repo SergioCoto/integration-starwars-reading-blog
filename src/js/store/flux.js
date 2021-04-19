@@ -12,10 +12,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: null,
 			favorites_raw: [],
 			current_username: "",
-			url: "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io" // change this! See below, do NOT add slash '/' at the end
+			url: "https://3000-lime-lamprey-xbyaj27l.ws-us03.gitpod.io" // change this! See below, do NOT add slash '/' at the end
 
 			// url: refer to API created in repository: https://github.com/litzcode/python-flask-starwars-reading-blog for URL
-			// run 'URL/populate' to populate database for testing purposes
+			// run in Postman GET 'URL/populate' to populate database for testing purposes
+			// email: user01@example.com , password: 01
 		},
 		actions: {
 			// using Async Await because it allows me to use .then() to getFavorites in login.js file afer user login
