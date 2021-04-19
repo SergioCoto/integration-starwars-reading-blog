@@ -11,12 +11,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			loading: true,
 			token: null,
 			favorites_raw: [],
-			url: "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io"
+			url: "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io" // change this! See below, do NOT add slash '/' at the end
+
+			// url: refer to API created in repository: https://github.com/litzcode/python-flask-starwars-reading-blog for URL
+			// run 'URL/populate' to populate database for testing purposes
 		},
 		actions: {
 			// using Async Await because it allows me to use .then() to getFavorites in login.js file afer user login
 			login: async (email, password) => {
-				const URL = "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/token"; // API to create token
+				const store = getStore();
+
+				const URL = `${store.url}/token`; // API to create token
 				const CONFIG = {
 					method: "POST",
 					headers: {
@@ -61,7 +66,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getPeople: () => {
-				fetch("https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/character/")
+				const store = getStore();
+
+				fetch(`${store.url}/character/`)
 					.then(resp => {
 						console.log("GET people request: ", resp.ok);
 						resp.status >= 200 && resp.status < 300
@@ -77,7 +84,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getPlanets: () => {
-				fetch("https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/planet/")
+				const store = getStore();
+
+				fetch(`${store.url}/planet/`)
 					.then(resp => {
 						console.log("GET planets request: ", resp.ok);
 						resp.status >= 200 && resp.status < 300
@@ -93,7 +102,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getUsers: () => {
-				fetch("https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/user")
+				const store = getStore();
+
+				fetch(`${store.url}/user`)
 					.then(resp => {
 						console.log("GET user request: ", resp.ok);
 						resp.status >= 200 && resp.status < 300
@@ -112,7 +123,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 
 				if (store.token && store.token != "" && store.token != undefined) {
-					const URL = "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/favorite";
+					const URL = `${store.url}/favorite`;
 					const CONFIG = {
 						method: "GET",
 						headers: {
@@ -130,7 +141,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return resp.json();
 						})
 						.then(data => {
-							//sessionStorage.setItem("favorites", data);
 							setStore({ favorites: data, loading: false });
 							console.log("Favorites array from getFavorites(): ", data);
 						})
@@ -143,7 +153,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 
 				if (store.token && store.token != "" && store.token != undefined) {
-					const URL = "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/favorite_raw";
+					const URL = `${store.url}/favorite_raw`;
 					const CONFIG = {
 						method: "GET",
 						headers: {
@@ -185,7 +195,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log("Filtered result: ", filteredResults);
 
 				if (filteredResults.length == 0) {
-					const URL = "https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/favorite";
+					const URL = `${store.url}/favorite`;
 					const CONFIG = {
 						method: "POST",
 						headers: {
@@ -218,7 +228,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			removeFavorite: (favoriteId, item) => {
 				const store = getStore();
 
-				const URL = `https://3000-crimson-mandrill-e4fzue4k.ws-us03.gitpod.io/favorite/${favoriteId}`;
+				const URL = `${store.url}/favorite/${favoriteId}`;
 				const CONFIG = {
 					method: "DELETE",
 					headers: {
