@@ -61,8 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			logout: () => {
 				sessionStorage.removeItem("token");
-				sessionStorage.removeItem("favorites");
-				setStore({ token: null, favorites: [] });
+				setStore({ token: null, favorites: [], favorites_raw: [] });
 			},
 
 			getPeople: () => {
@@ -216,16 +215,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 						})
 						.then(data => {
 							console.log("Favorite added to DB: ", data);
+							getActions().getFavorites();
 						})
+						.then(() => getActions().getFavoritesRaw()) // added to allow deletion of items just added, otherwise a Refresh is needed
 						.catch(error => {
 							console.error("CREATE Token error: ", error);
 						});
-
-					setStore({ favorites: store.favorites.concat(item) });
 				} else alert("Item already added to favorites");
 			},
 
-			removeFavorite: (favoriteId, item) => {
+			removeFavorite: favoriteId => {
 				const store = getStore();
 
 				const URL = `${store.url}/favorite/${favoriteId}`;
@@ -246,6 +245,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(() => getActions().getFavorites()) // remember to use callback function, otherwise it wont work
+					.then(() => getActions().getFavoritesRaw())
 					.catch(error => console.error("DELETE favorites error: ", error));
 
 				console.log("This is the URL to remove: ", URL);
